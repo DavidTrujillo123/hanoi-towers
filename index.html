@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hanoi Tower</title>
+  <style>
+    .container {	
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #ta, #tb, #tc {
+      width: 300px;
+      height: 300px;
+      border: 1px solid black;
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      align-items: center;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hanoi Tower</h1>
+  <input type="number" min="3" value="3" id="nDisksInput" placeholder="Enter the number of disks">
+  <button id="btnCreate">Create</button>
+  <button id="btnAutoSolve">Auto Solve</button>
+  <button id="btnReset">Reset</button>
+  <p id="steps"></p>
+
+  <div class="container">
+    <div id="ta"></div>
+    <div id="tb"></div>
+    <div id="tc"></div>
+  </div>
+  <script type="module" src="./js/index.js"></script>
+</body>
+</html>
