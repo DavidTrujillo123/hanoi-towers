@@ -1,13 +1,15 @@
 import { Tower } from "./tower.mjs";
 
 export class Towers {
-  constructor(nDisks, towerA, towerB, towerC) {
+  constructor(nDisks, stepsTag, towerA, towerB, towerC) {
     this.nDisks = nDisks;
     this.towerA = new Tower(nDisks, towerA);
     this.towerB = new Tower(0, towerB);
     this.towerC = new Tower(0, towerC);
+    this.stepsTag = stepsTag;
     this.steps = 0;
 
+    this.stepsTag.textContent = `Steps: ${this.steps}`;
     this.towers = [this.towerA, this.towerB, this.towerC];
   }
 
@@ -17,30 +19,22 @@ export class Towers {
         this.moveDiskTower(towerPrime, towerSec);
         return;
       }
-  
+
       if (towerTri.isActive) {
         this.moveDiskTower(towerPrime, towerTri);
         return;
       }
-  
-      this.moveTopDownDisk(towerPrime);
-      return;
-    } else {
-      this.moveTopDownDisk(towerPrime);
-      return;
-    }
-  }
 
-  moveTopDownDisk(tower) {
-    if (!tower.isActive) {
-      tower.moveTop();
+      this.moveTopDownDisk(towerPrime);
+      return;
     } else {
-      tower.moveDown();
+      this.moveTopDownDisk(towerPrime);
+      return;
     }
   }
 
   moveDiskTower(toTower, formTower) {
-    this.steps++;
+    this.handleSteps();
     if (toTower.disks.length <= 0) {
       formTower.moveDiskTower(toTower);
       return;
@@ -61,16 +55,58 @@ export class Towers {
     return;
   }
 
-  checkWin() {
+  async autoSolveHanoi(towerA, towerB, towerC, n) {
+    if (n === 1) {
+      await this.pause(500);
+      towerA.moveTop();
+      
+      await this.pause(500);
+      towerA.moveDiskTower(towerC);
+
+      this.handleSteps();
+      await this.checkWin();
+    } else {
+      await this.autoSolveHanoi(towerA, towerC, towerB, n - 1);
+
+      await this.pause(500);
+      towerA.moveTop();
+
+      await this.pause(500);
+      towerA.moveDiskTower(towerC);
+      
+      this.handleSteps();
+
+      await this.autoSolveHanoi(towerB, towerA, towerC, n - 1);
+    }
+  }
+  async checkWin() {
+    await this.pause(100);
+
     if (this.towerB.nDisks == this.nDisks) {
       console.log("winner");
+      window.alert('You won!');
+      this.reset();
     }
     if (this.towerC.nDisks == this.nDisks) {
       console.log("winner");
+      window.alert('You won!');
+      this.reset();
     }
   }
-
   reset() {
+    this.resetAll();
+
+    this.towerA = new Tower(this.nDisks, this.towerA.tower);
+    // this.towerB = new Tower(0, this.towerB.tower);
+    // this.towerC = new Tower(0, this.towerC.tower);
+    // this.stepsTag = stepsTag;
+    this.steps = 0;
+
+    this.stepsTag.textContent = `Steps: ${this.steps}`;
+    this.towers = [this.towerA, this.towerB, this.towerC];
+  }
+
+  resetAll(){
     this.towerA.deleteAllDisks();
     this.towerB.deleteAllDisks();
     this.towerC.deleteAllDisks();
@@ -85,30 +121,24 @@ export class Towers {
     );
   }
 
-  async autoSolveHanoi(towerA, towerB, towerC, n) {
-    if (n === 1) {
-      await this.pause(500);
-      towerA.moveTop();
+  handleSteps() {
+    this.steps++;
+    this.stepsTag.textContent = `Steps: ${this.steps}`;
+  }
 
-      await this.pause(500);
-      towerA.moveDiskTower(towerC);
-      this.checkWin();
-      this.steps++;
+  moveTopDownDisk(tower) {
+    if (!tower.isActive) {
+      tower.moveTop();
     } else {
-      await this.autoSolveHanoi(towerA, towerC, towerB, n - 1);
-
-      await this.pause(500);
-      towerA.moveTop();
-
-      await this.pause(500);
-      towerA.moveDiskTower(towerC);
-      this.steps++;
-
-      await this.autoSolveHanoi(towerB, towerA, towerC, n - 1);
+      tower.moveDown();
     }
   }
 
   pause(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  getStepsRecomended() {
+    return Math.pow(2, this.nDisks) - 1;
   }
 }
