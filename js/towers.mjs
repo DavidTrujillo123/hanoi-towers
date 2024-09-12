@@ -7,6 +7,7 @@ export class Towers {
   #towerC;
   #stepsTag;
   #steps;
+  #isAutoSolve = false;
   constructor(nDisks, stepsTag, towerTagA, towerTagB, towerTagC) {
     this.#nDisks = nDisks;
     this.#towerA = new Tower(nDisks, towerTagA);
@@ -18,6 +19,9 @@ export class Towers {
     this.#stepsTag.textContent = `Steps: ${this.#steps}`;
   }
   handleTowerDiskActions(towerPrime, towerSec, towerTri) {
+    if(this.#isAutoSolve){
+      return;
+    }
     if (!towerPrime.getIsOnTopDisk()) {
       if (towerSec.getIsOnTopDisk()) {
         this.verifyMoveDisk(towerPrime, towerSec);
@@ -83,12 +87,14 @@ export class Towers {
     }
   }
   async autoSolve() {
+    this.#isAutoSolve = true; 
     await this.solveHanoi(
       this.#towerA,
       this.#towerB,
       this.#towerC,
       this.#nDisks
     );
+    this.#isAutoSolve = false; 
   }
   async checkWin() {
     await this.setPause(100);
