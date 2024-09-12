@@ -1,32 +1,34 @@
 export class Disk{
-  constructor(height, width){
-    this.height = height;
-    this.width = width;
-    this.isMounted = false;
-    
+  #height;
+  #width;
+  constructor(height, width, positionBottom){
+    this.#height = height;
+    this.#width = width;
     this.disk = document.createElement("div");
-    this.disk.style.height = `${this.height}px`;
-    this.disk.style.width = `${this.width}px`;
-    // this.disk.style.backgroundColor = "#7CF5FF";
-    // this.disk.style.border = "1px solid";
+    this.positionBottom = positionBottom;
+    this.#initStyles();
+  }
+  #initStyles(){
+    this.disk.style.height = `${this.#height}px`;
+    this.disk.style.width = `${this.#width}px`;
     this.disk.style.backgroundImage = "url(../images/disk.png)";
-    // this.disk.style.backgroundSize = "conver";
     this.disk.style.backgroundSize = "100% 100%";
     this.disk.style.backgroundRepeat = "no-repeat";
     this.disk.style.backgroundPosition = "center";
-    this.disk.style.position = "absolute";
+    this.disk.style.position = "absolute";    
+    this.disk.style.bottom = `${this.positionBottom}px`;
   }
-
-  setIsMounted(bool){
-    this.isMounted = bool;
+  setStyles(typeStyle, value){
+    // type can be Background, size, position, all styles
+    this.disk.style[typeStyle] = value;
   }
-  getIsMounted(){
-    return this.isMounted;
-  }
-  getDisk() {
+  getDiskTag() {
     return this.disk;
   }
-  view(){
-    console.log(this.disk);
+  getWidth() {
+    return this.#width;
+  }
+  getHeight() {
+    return this.#height;
   }
 }

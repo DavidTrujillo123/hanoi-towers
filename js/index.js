@@ -1,16 +1,16 @@
 import { Towers } from "./towers.mjs";
 
 let $nDisksSelect = document.getElementById("nDisksSelect").value;
+const $AtowerTag = document.getElementById("AtowerTag");
+const $BtowerTag = document.getElementById("BtowerTag");
+const $CtowerTag = document.getElementById("CtowerTag");
 const $btnCreate = document.getElementById("btnCreate");
-const $ta = document.getElementById("ta");
-const $tb = document.getElementById("tb");
-const $tc = document.getElementById("tc");
 const $btnAutoSolve = document.getElementById("btnAutoSolve");
 const $btnReset = document.getElementById("btnReset");
 const $stepsTag = document.getElementById("stepsTag");
 const $stepsRecomendedTag = document.getElementById("stepsRecomendedTag");
 
-let towers = new Towers($nDisksSelect, $stepsTag, $ta, $tb, $tc);
+let towers = new Towers($nDisksSelect, $stepsTag, $AtowerTag, $BtowerTag, $CtowerTag);
 
 $stepsRecomendedTag.textContent = `Steps Recomended: ${towers.getStepsRecomended()}`;
 
@@ -25,16 +25,15 @@ function setDisableBtns(flag){
   $btnReset.disabled = flag;
 }
 
-$ta.addEventListener("click", () => {
-  towerActions(towers.towerA, towers.towerB, towers.towerC);
+$AtowerTag.addEventListener("click", () => {
+  towerActions(towers.getTowerA(), towers.getTowerB(), towers.getTowerC());
 });
-$tb.addEventListener("click", () => {
-  towerActions(towers.towerB, towers.towerA, towers.towerC);
+$BtowerTag.addEventListener("click", () => {
+  towerActions(towers.getTowerB(), towers.getTowerA(), towers.getTowerC());
 });
-$tc.addEventListener("click", () => {
-  towerActions(towers.towerC, towers.towerA, towers.towerB);
+$CtowerTag.addEventListener("click", () => {
+  towerActions(towers.getTowerC(), towers.getTowerA(), towers.getTowerB());
 });
-
 $btnAutoSolve.addEventListener("click", async () => {
   let text = "To auto solve you need restart!\nOK or Cancel.";
   if (confirm(text)) {
@@ -44,15 +43,12 @@ $btnAutoSolve.addEventListener("click", async () => {
     setDisableBtns(false);
   }
 });
-
 $btnReset.addEventListener("click", () => {
   towers.reset();
-  // towers = new Towers($nDisksSelect, $stepsTag, $ta, $tb, $tc);
 });
-
 $btnCreate.addEventListener("click", () => {
   towers.resetAll();
   $nDisksSelect = document.getElementById("nDisksSelect").value;
-  towers = new Towers($nDisksSelect, $stepsTag, $ta, $tb, $tc);
+  towers = new Towers($nDisksSelect, $stepsTag, $AtowerTag, $BtowerTag, $CtowerTag);
   $stepsRecomendedTag.textContent = `Steps recomended: ${towers.getStepsRecomended()}`;
 });
