@@ -6,18 +6,18 @@ export class Tower {
     this.tower = tower;
     this.isActive = false;
     this.disks = [];
+    this.height = 50;
+    this.width = 200;
+    this.bottom = 15;
     this.fillTower();
   }
 
   fillTower() {
-    const height = 50;
-    const width = 200;
-
     for (let i = 0; i < this.nDisks; i++) {
-      const newDisk = new Disk(height, width - 30 * i);
+      const newDisk = new Disk(this.height, this.width - 30 * i);
       this.tower.appendChild(newDisk.getDisk());
       this.disks.push(newDisk);
-      newDisk.getDisk().style.bottom = `${i * height + i}px`;
+      newDisk.getDisk().style.bottom = `${this.bottom + i * this.height}px`;
     }
   }
 
@@ -33,7 +33,7 @@ export class Tower {
     this.tower.appendChild(newDisk.getDisk());
     this.disks.push(newDisk);
     this.nDisks = this.disks.length;
-    newDisk.getDisk().style.bottom = `${50*(this.nDisks-1)}px`;
+    newDisk.getDisk().style.bottom = `${(this.height * (this.nDisks - 1))+this.bottom}px`;
     return newDisk;
   }
 
@@ -58,7 +58,6 @@ export class Tower {
     const { diskObj, diskTag } = this.getTopDisk();
 
     diskTag.style.top = `0px`;
-    diskTag.style.backgroundColor = "green";
     diskObj.setIsMounted(!this.isActive);
     this.isActive = !this.isActive;
   }
@@ -67,7 +66,6 @@ export class Tower {
     const { diskObj, diskTag } = this.getTopDisk();
 
     diskTag.style.top = `initial`;
-    diskTag.style.backgroundColor = "yellow";
     diskObj.setIsMounted(!this.isActive);
     this.isActive = !this.isActive;
   }
@@ -79,13 +77,10 @@ export class Tower {
     this.nDisks = this.disks.length;
   }
 
-  deleteAllDisks(){
+  deleteAllDisks() {
     this.tower.replaceChildren();
     this.disks = [];
     this.nDisks = 0;
-  }
-  printTower() {
-    // console.log('tower', this.tower, 'nDisk');
   }
 
   printDisk() {

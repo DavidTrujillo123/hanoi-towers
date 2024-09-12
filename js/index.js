@@ -1,6 +1,6 @@
 import { Towers } from "./towers.mjs";
 
-let $nDisksInput = document.getElementById("nDisksInput").value;
+let $nDisksSelect = document.getElementById("nDisksSelect").value;
 const $btnCreate = document.getElementById("btnCreate");
 const $ta = document.getElementById("ta");
 const $tb = document.getElementById("tb");
@@ -10,7 +10,7 @@ const $btnReset = document.getElementById("btnReset");
 const $stepsTag = document.getElementById("stepsTag");
 const $stepsRecomendedTag = document.getElementById("stepsRecomendedTag");
 
-let towers = new Towers($nDisksInput, $stepsTag, $ta, $tb, $tc);
+let towers = new Towers($nDisksSelect, $stepsTag, $ta, $tb, $tc);
 
 $stepsRecomendedTag.textContent = `Steps Recomended: ${towers.getStepsRecomended()}`;
 
@@ -36,19 +36,23 @@ $tc.addEventListener("click", () => {
 });
 
 $btnAutoSolve.addEventListener("click", async () => {
-  setDisableBtns(true);
-  await towers.autoSolve();
-  setDisableBtns(false);
+  let text = "To auto solve you need restart!\nOK or Cancel.";
+  if (confirm(text)) {
+    towers.reset();
+    setDisableBtns(true);
+    await towers.autoSolve();
+    setDisableBtns(false);
+  }
 });
 
 $btnReset.addEventListener("click", () => {
   towers.reset();
-  // towers = new Towers($nDisksInput, $stepsTag, $ta, $tb, $tc);
+  // towers = new Towers($nDisksSelect, $stepsTag, $ta, $tb, $tc);
 });
 
 $btnCreate.addEventListener("click", () => {
   towers.resetAll();
-  $nDisksInput = document.getElementById("nDisksInput").value;
-  towers = new Towers($nDisksInput, $stepsTag, $ta, $tb, $tc);
+  $nDisksSelect = document.getElementById("nDisksSelect").value;
+  towers = new Towers($nDisksSelect, $stepsTag, $ta, $tb, $tc);
   $stepsRecomendedTag.textContent = `Steps recomended: ${towers.getStepsRecomended()}`;
 });

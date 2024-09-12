@@ -13,15 +13,23 @@ export class Towers {
     this.towers = [this.towerA, this.towerB, this.towerC];
   }
 
-  handleTowerDiskActions(towerPrime, towerSec, towerTri) {
+  handleTowerDiskActions(towerPrime, towerSec, towerTri) {  
+    if(
+      towerPrime.disks.length <= 0 && 
+      !towerSec.isActive && 
+      !towerTri.isActive)
+    {  
+      return;
+    }
+    
     if (!towerPrime.isActive) {
       if (towerSec.isActive) {
-        this.moveDiskTower(towerPrime, towerSec);
+        this.handdleMoveDiskTower(towerPrime, towerSec);
         return;
       }
 
       if (towerTri.isActive) {
-        this.moveDiskTower(towerPrime, towerTri);
+        this.handdleMoveDiskTower(towerPrime, towerTri);
         return;
       }
 
@@ -33,7 +41,7 @@ export class Towers {
     }
   }
 
-  moveDiskTower(toTower, formTower) {
+  handdleMoveDiskTower(toTower, formTower) {
     this.handleSteps();
     if (toTower.disks.length <= 0) {
       formTower.moveDiskTower(toTower);
@@ -97,9 +105,6 @@ export class Towers {
     this.resetAll();
 
     this.towerA = new Tower(this.nDisks, this.towerA.tower);
-    // this.towerB = new Tower(0, this.towerB.tower);
-    // this.towerC = new Tower(0, this.towerC.tower);
-    // this.stepsTag = stepsTag;
     this.steps = 0;
 
     this.stepsTag.textContent = `Steps: ${this.steps}`;
